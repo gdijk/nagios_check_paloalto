@@ -64,7 +64,10 @@ class Certificate(np.Resource):
             not_valid_after = Finder.find_item(certificate,
                                              'not-valid-after').replace(
                 "GMT", "").strip()
-            date_object = datetime.strptime(not_valid_after, '%b %d %H:%M:%S %Y')
+            try:                
+                date_object = datetime.strptime(not_valid_after, '%b %d %H:%M:%S %Y')            
+            except ValueError:                
+                date_object = datetime.strptime(not_valid_after, '%b %d %Y')
             difference = date_object - get_now()
             _log.debug('Certificate %s difference: %s days' % (
                 certificate.get('name'), difference.days))
