@@ -40,9 +40,9 @@ class DiskSpace(np.Resource):
         """
         _log.info('Reading XML from: %s', self.xml_obj.build_request_url())
         soup = self.xml_obj.read()
-        available_hdds = re.findall('(sda\d.*?)(?=/)', soup.result.string)
+        available_hdds = re.findall('(md\d.?|sda\d.*?)(?=/)', soup.result.string)
         for hdd in available_hdds:
-            sda = re.findall('(sda\d)', hdd)[0]
+            sda = re.findall('(md\d|sda\d)', hdd)[0]
             percent = int(re.findall('([0-9]+%)', hdd)[0].replace("%", ""))
             yield np.Metric(sda, percent, '%', context='diskspace')
 
